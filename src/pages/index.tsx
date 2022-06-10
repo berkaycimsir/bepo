@@ -1,22 +1,13 @@
-import { Poll } from '@prisma/client';
+import { useQuery } from '@/utils/trpc';
 import type { NextPage } from 'next';
-import prisma from '../lib/prisma';
 
-export async function getServerSideProps() {
-  const polls = await prisma.poll.findMany();
+const Home: NextPage = () => {
+  const { data, isLoading } = useQuery(['poll.all']);
 
-  return {
-    props: {
-      polls,
-    },
-  };
-}
+  if (isLoading || !data) return <div>Loading...</div>;
 
-type Props = {
-  polls: Array<Poll>;
-};
+  const polls = data?.polls;
 
-const Home: NextPage<Props> = ({ polls }) => {
   return (
     <div className="p-20">
       <h1 className="text-3xl text-indigo-400 font-bold underline mb-3">
