@@ -1,3 +1,4 @@
+import PollQuestion from '@/components/Poll/PollQuestion';
 import { useQuery } from '@/utils/trpc';
 import type { NextPage } from 'next';
 
@@ -14,9 +15,7 @@ const Home: NextPage = () => {
         Polls
       </h1>
       {polls.map((poll) => (
-        <div className="text-gray-500 text-lg" key={poll.id}>
-          {poll.question}
-        </div>
+        <PollQuestion key={poll.id} poll={poll} />
       ))}
     </div>
   );
