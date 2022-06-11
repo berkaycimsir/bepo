@@ -10,6 +10,14 @@ datasource db {
 }
 
 model Poll {
-  id       Int    @id @default(autoincrement())
+  id       Int      @id @default(autoincrement())
   question String
+  options  Option[]
+}
+
+model Option {
+  id     Int    @id @default(autoincrement())
+  value  String
+  poll   Poll   @relation(fields: [pollId], references: [id])
+  pollId Int
 }

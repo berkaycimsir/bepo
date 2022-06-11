@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@prisma/client": "^3.15.1",
+    "@tailwindcss/forms": "^0.5.2",
     "@trpc/client": "^9.24.0",
     "@trpc/next": "^9.24.0",
     "@trpc/react": "^9.24.0",
