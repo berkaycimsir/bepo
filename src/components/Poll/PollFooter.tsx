@@ -4,16 +4,18 @@ import PollVoteButton from './PollVoteButton';
 
 type Props = {
   poll: inferQueryOutput<'poll.all'>['polls'][0];
+  currentVote: { id: number };
+  totalVotes: number;
 };
 
-const PollFooter: React.FC<Props> = ({ poll }) => {
+const PollFooter: React.FC<Props> = ({ poll, currentVote, totalVotes }) => {
   return (
     <div className="mt-10 flex flex-row items-center justify-between">
       <div className="text-gray-400 font-normal text-sm">
-        Total Votes: {poll.votes.length}
+        Total Votes: {totalVotes}
       </div>
 
-      <PollVoteButton />
+      <PollVoteButton pollId={poll.id} currentVote={currentVote} />
     </div>
   );
 };
