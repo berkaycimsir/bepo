@@ -1,5 +1,5 @@
 import { inferQueryOutput } from '@/utils/trpc';
-import { useUserId } from 'hooks/useUserId';
+import { useUserId } from '@/hooks/useUserId';
 import React from 'react';
 import PollFooter from './PollFooter';
 import PollOption from './PollOption';

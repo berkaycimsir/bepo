@@ -1,5 +1,5 @@
 import { inferQueryOutput, useContext, useMutation } from '@/utils/trpc';
-import { useUserId } from 'hooks/useUserId';
+import { useUserId } from '@/hooks/useUserId';
 import { unionBy } from 'lodash';
 import React from 'react';
 
