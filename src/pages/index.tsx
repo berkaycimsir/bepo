@@ -10,10 +10,9 @@ const Home: NextPage = () => {
   const polls = data?.polls;
 
   return (
-    <div className="p-20">
-      <h1 className="text-3xl text-indigo-400 font-bold underline mb-3">
-        Polls
-      </h1>
+    <div className="container mx-auto p-20">
+      <h1 className="text-3xl text-stone-600 font-bold mb-3">Public Polls</h1>
+      <hr className="my-8 border-gray-100" />
       {polls.map((poll) => (
         <PollQuestion key={poll.id} poll={poll} />
       ))}

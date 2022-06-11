@@ -10,9 +10,12 @@ datasource db {
 }
 
 model Poll {
-  id       Int      @id @default(autoincrement())
-  question String
-  options  Option[]
+  id        Int      @id @default(autoincrement())
+  question  String
+  options   Option[]
+  private   Boolean  @default(false)
+  privateId String   @default(cuid())
+  votes     Vote[]
 }
 
 model Option {
@@ -20,4 +23,14 @@ model Option {
   value  String
   poll   Poll   @relation(fields: [pollId], references: [id])
   pollId Int
+  votes  Vote[]
+}
+
+model Vote {
+  id           Int    @id @default(autoincrement())
+  uniqueUserId String
+  option       Option @relation(fields: [optionId], references: [id])
+  optionId     Int
+  poll         Poll   @relation(fields: [pollId], references: [id])
+  pollId       Int
 }

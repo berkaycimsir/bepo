@@ -5,7 +5,7 @@ export const pollRouter = createRouter().query('all', {
   async resolve() {
     return {
       polls: await prisma.poll.findMany({
-        include: { options: true },
+        include: { votes: true, options: { include: { votes: true } } },
       }),
     };
   },
