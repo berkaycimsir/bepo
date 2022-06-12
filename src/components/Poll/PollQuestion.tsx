@@ -26,7 +26,7 @@ const PollQuestion: React.FC<Props> = ({ poll }) => {
   const totalVotes = React.useMemo(() => poll.votes.length, [poll.votes]);
 
   return (
-    <div className="flex  mt-12 flex-col p-8 bg-white shadow-md rounded-lg">
+    <div className="flex mt-12 flex-col p-8 bg-white shadow-md rounded-lg">
       <div className="text-gray-700 font-bold text-lg">{poll.question}</div>
 
       <ul className="mt-3">
@@ -34,6 +34,7 @@ const PollQuestion: React.FC<Props> = ({ poll }) => {
           <PollOption
             key={option.id}
             option={option}
+            userVote={userVote}
             totalVotes={totalVotes}
             currentVote={currentVote}
             setCurrentVote={setCurrentVote}
@@ -44,6 +45,7 @@ const PollQuestion: React.FC<Props> = ({ poll }) => {
       <PollFooter
         totalVotes={totalVotes}
         currentVote={currentVote}
+        userVote={userVote}
         poll={poll}
       />
     </div>

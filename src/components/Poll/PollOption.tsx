@@ -6,6 +6,7 @@ type Props = {
   totalVotes: number;
   currentVote: { id: number };
   setCurrentVote: React.Dispatch<React.SetStateAction<{ id: number }>>;
+  userVote: inferQueryOutput<'poll.all'>['polls'][0]['options'][0] | undefined;
 };
 
 const PollOption: React.FC<Props> = ({
@@ -13,6 +14,7 @@ const PollOption: React.FC<Props> = ({
   totalVotes,
   currentVote,
   setCurrentVote,
+  userVote,
 }) => {
   const onCheck = React.useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,17 +54,19 @@ const PollOption: React.FC<Props> = ({
           {option.value}
         </label>
 
-        <div className="mt-4 flex flex-row items-center">
-          <div className="text-gray-400 font-normal text-sm mr-3">
-            {optionPercentage}
+        {Boolean(userVote) && (
+          <div className="mt-4 flex flex-row items-center">
+            <div className="text-gray-400 font-normal text-sm mr-3">
+              {optionPercentage}
+            </div>
+            <div className="w-full  bg-gray-200 rounded-full h-2.5">
+              <div
+                className="bg-indigo-400 h-2.5 rounded-full transition-all duration-200"
+                style={{ width: optionPercentage }}
+              />
+            </div>
           </div>
-          <div className="w-full  bg-gray-200 rounded-full h-2.5">
-            <div
-              className="bg-indigo-400 h-2.5 rounded-full transition-all duration-200"
-              style={{ width: optionPercentage }}
-            />
-          </div>
-        </div>
+        )}
       </div>
     </>
   );
