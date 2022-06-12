@@ -27,4 +27,28 @@ export const pollRouter = createRouter()
         },
       });
     },
+  })
+  .mutation('add-poll', {
+    input: z.object({
+      question: z.string(),
+      options: z.array(
+        z.object({
+          value: z.string(),
+        })
+      ),
+      isPrivate: z.boolean(),
+    }),
+    async resolve({ input: { question, options, isPrivate } }) {
+      return await prisma.poll.create({
+        data: {
+          question,
+          private: isPrivate,
+          options: {
+            createMany: {
+              data: options,
+            },
+          },
+        },
+      });
+    },
   });
