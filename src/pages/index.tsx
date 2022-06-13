@@ -8,7 +8,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 const Home: NextPage = () => {
-  const { data, isLoading } = useQuery(['poll.all']);
+  const { data, isLoading } = useQuery(['poll.public-polls']);
   const router = useRouter();
 
   const polls = data?.polls;

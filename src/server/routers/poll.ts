@@ -3,13 +3,25 @@ import { createRouter } from '../createRouter';
 import { z } from 'zod';
 
 export const pollRouter = createRouter()
-  .query('all', {
+  .query('public-polls', {
     async resolve() {
       return {
         polls: await prisma.poll.findMany({
           include: { votes: true, options: { include: { votes: true } } },
+          where: { private: { not: { equals: true } } },
         }),
       };
+    },
+  })
+  .query('private-poll', {
+    input: z.object({
+      pollId: z.string(),
+    }),
+    async resolve({ input: { pollId } }) {
+      return await prisma.poll.findFirst({
+        where: { privateId: pollId },
+        include: { votes: true, options: { include: { votes: true } } },
+      });
     },
   })
   .mutation('add-vote', {

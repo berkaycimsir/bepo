@@ -5,7 +5,7 @@ import PollFooter from './PollFooter';
 import PollOption from './PollOption';
 
 type Props = {
-  poll: inferQueryOutput<'poll.all'>['polls'][0];
+  poll: inferQueryOutput<'poll.public-polls'>['polls'][0];
 };
 
 const PollQuestion: React.FC<Props> = ({ poll }) => {

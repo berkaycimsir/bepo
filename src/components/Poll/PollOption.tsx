@@ -2,11 +2,13 @@ import { inferQueryOutput } from '@/utils/trpc';
 import React from 'react';
 
 type Props = {
-  option: inferQueryOutput<'poll.all'>['polls'][0]['options'][0];
+  option: inferQueryOutput<'poll.public-polls'>['polls'][0]['options'][0];
   totalVotes: number;
   currentVote: { id: number };
   setCurrentVote: React.Dispatch<React.SetStateAction<{ id: number }>>;
-  userVote: inferQueryOutput<'poll.all'>['polls'][0]['options'][0] | undefined;
+  userVote:
+    | inferQueryOutput<'poll.public-polls'>['polls'][0]['options'][0]
+    | undefined;
 };
 
 const PollOption: React.FC<Props> = ({

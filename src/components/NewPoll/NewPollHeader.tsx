@@ -11,6 +11,7 @@ type Props = {
   }[];
   isPrivate: boolean;
   resetForm: () => void;
+  setPrivateUrl: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const NewPollHeader: React.FC<Props> = ({
@@ -19,6 +20,7 @@ const NewPollHeader: React.FC<Props> = ({
   options,
   isPrivate,
   resetForm,
+  setPrivateUrl,
 }) => {
   const titleInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -38,6 +40,7 @@ const NewPollHeader: React.FC<Props> = ({
       />
 
       <NewPollButton
+        setPrivateUrl={setPrivateUrl}
         options={options}
         question={question}
         isPrivate={isPrivate}

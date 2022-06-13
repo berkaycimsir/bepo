@@ -6,7 +6,9 @@ import React from 'react';
 type Props = {
   currentVote: { id: number };
   pollId: number;
-  userVote: inferQueryOutput<'poll.all'>['polls'][0]['options'][0] | undefined;
+  userVote:
+    | inferQueryOutput<'poll.public-polls'>['polls'][0]['options'][0]
+    | undefined;
 };
 
 const PollVoteButton: React.FC<Props> = ({ currentVote, pollId, userVote }) => {
@@ -18,8 +20,8 @@ const PollVoteButton: React.FC<Props> = ({ currentVote, pollId, userVote }) => {
   );
 
   const getNewPollData = (
-    newVote: inferQueryOutput<'poll.all'>['polls'][0]['votes'][0],
-    poll: inferQueryOutput<'poll.all'>['polls'][0]
+    newVote: inferQueryOutput<'poll.public-polls'>['polls'][0]['votes'][0],
+    poll: inferQueryOutput<'poll.public-polls'>['polls'][0]
   ) => ({
     ...poll,
     votes: unionBy([newVote], poll.votes, 'id'),
@@ -35,8 +37,8 @@ const PollVoteButton: React.FC<Props> = ({ currentVote, pollId, userVote }) => {
 
   const { mutate } = useMutation(['poll.add-vote'], {
     onMutate: async ({ optionId }) => {
-      await cancelQuery(['poll.all']);
-      const previousData = getQueryData(['poll.all']);
+      await cancelQuery(['poll.public-polls']);
+      const previousData = getQueryData(['poll.public-polls']);
       const newVote = {
         id: Date.now(),
         pollId,
@@ -44,7 +46,7 @@ const PollVoteButton: React.FC<Props> = ({ currentVote, pollId, userVote }) => {
         optionId,
       };
       // @ts-ignore
-      setQueryData(['poll.all'], (prev) => ({
+      setQueryData(['poll.public-polls'], (prev) => ({
         ...prev,
         polls: prev?.polls.map((poll) =>
           poll.id === pollId ? getNewPollData(newVote, poll) : poll
