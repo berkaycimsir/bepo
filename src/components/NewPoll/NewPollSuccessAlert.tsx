@@ -25,7 +25,7 @@ const NewPollSuccessAlert: React.FC<Props> = ({
         <span className="font-bold">Your poll was created successfully !</span>
       </div>
       <p>
-        Below is your{' '}
+        Here is your{' '}
         <span
           onClick={copyUrlToClipboard}
           className="font-bold cursor-pointer select-none"
