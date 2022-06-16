@@ -6,9 +6,10 @@ import PollOption from './PollOption';
 
 type Props = {
   poll: inferQueryOutput<'poll.public-polls'>['polls'][0];
+  isDetails?: boolean;
 };
 
-const PollQuestion: React.FC<Props> = ({ poll }) => {
+const PollQuestion: React.FC<Props> = ({ poll, isDetails = false }) => {
   const { userId } = useUserId();
 
   const userVote = React.useMemo(
@@ -47,6 +48,7 @@ const PollQuestion: React.FC<Props> = ({ poll }) => {
         currentVote={currentVote}
         userVote={userVote}
         poll={poll}
+        isDetails={isDetails}
       />
     </div>
   );

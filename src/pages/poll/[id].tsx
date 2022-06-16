@@ -10,7 +10,9 @@ const PollDetails = () => {
   const router = useRouter();
   const pollId = router.query.id as string;
 
-  const { data, isLoading } = useQuery(['poll.private-poll', { pollId }]);
+  const { data, isLoading } = useQuery(['poll.private-poll', { pollId }], {
+    refetchInterval: 1000,
+  });
 
   return (
     <MainLayout showHeader={false}>
@@ -20,7 +22,11 @@ const PollDetails = () => {
           className="w-8 h-8 text-stone-600"
         />
       </div>
-      {isLoading || !data ? <PollSkeleton /> : <PollQuestion poll={data} />}
+      {isLoading || !data ? (
+        <PollSkeleton />
+      ) : (
+        <PollQuestion isDetails={true} poll={data} />
+      )}
     </MainLayout>
   );
 };

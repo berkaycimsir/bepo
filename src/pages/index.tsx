@@ -4,7 +4,6 @@ import PollSkeleton from '@/components/Poll/PollSkeleton';
 import MainLayout from '@/layouts/MainLayout';
 import { useQuery } from '@/utils/trpc';
 import type { NextPage } from 'next';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 const Home: NextPage = () => {

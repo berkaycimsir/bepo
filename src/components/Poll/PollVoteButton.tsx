@@ -1,4 +1,4 @@
-import { inferQueryOutput, useContext, useMutation } from '@/utils/trpc';
+import { inferQueryInput, inferQueryOutput, useContext, useMutation } from '@/utils/trpc';
 import { useUserId } from '@/hooks/useUserId';
 import { unionBy } from 'lodash';
 import React from 'react';
@@ -6,12 +6,18 @@ import React from 'react';
 type Props = {
   currentVote: { id: number };
   pollId: number;
-  userVote:
-    | inferQueryOutput<'poll.public-polls'>['polls'][0]['options'][0]
-    | undefined;
+  isDetails: boolean;
+  pollPrivateId: string;
+  userVote: inferQueryOutput<'poll.public-polls'>['polls'][0]['options'][0] | undefined;
 };
 
-const PollVoteButton: React.FC<Props> = ({ currentVote, pollId, userVote }) => {
+const PollVoteButton: React.FC<Props> = ({
+  currentVote,
+  pollId,
+  userVote,
+  pollPrivateId,
+  isDetails,
+}) => {
   const { userId } = useUserId();
   const { setQueryData, getQueryData, cancelQuery } = useContext();
   const buttonDisabled = React.useMemo(
@@ -37,22 +43,23 @@ const PollVoteButton: React.FC<Props> = ({ currentVote, pollId, userVote }) => {
 
   const { mutate } = useMutation(['poll.add-vote'], {
     onMutate: async ({ optionId }) => {
-      await cancelQuery(['poll.public-polls']);
-      const previousData = getQueryData(['poll.public-polls']);
-      const newVote = {
-        id: Date.now(),
-        pollId,
-        uniqueUserId: userId as string,
-        optionId,
-      };
-      // @ts-ignore
-      setQueryData(['poll.public-polls'], (prev) => ({
-        ...prev,
-        polls: prev?.polls.map((poll) =>
-          poll.id === pollId ? getNewPollData(newVote, poll) : poll
-        ),
-      }));
-      return { previousData };
+      const newVote = { id: Date.now(), pollId, uniqueUserId: userId as string, optionId };
+      if (isDetails) {
+        const query: ['poll.private-poll', inferQueryInput<'poll.private-poll'>] = ['poll.private-poll', { pollId: pollPrivateId }]
+        await cancelQuery(query);
+        const previousData = getQueryData(query) as inferQueryOutput<'poll.public-polls'>['polls'][0];
+        setQueryData(query, getNewPollData(newVote, previousData));
+        return { previousData };
+      } else {
+        await cancelQuery(['poll.public-polls']);
+        const previousData = getQueryData(['poll.public-polls']) as inferQueryOutput<'poll.public-polls'>;
+        setQueryData(['poll.public-polls'], {
+          polls: previousData?.polls.map((poll) =>
+            poll.id === pollId ? getNewPollData(newVote, poll) : poll
+          ),
+        });
+        return { previousData };
+      }
     },
   });
 
