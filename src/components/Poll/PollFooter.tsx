@@ -45,7 +45,7 @@ const PollFooter: React.FC<Props> = ({
           className={`
              ${
                copied ? 'bg-green-100' : 'hover:bg-stone-100'
-             } rounded-xl py-2 pr-4 pl-2 mt-5 focus:outline-none font-lg text-sm text-center inline-flex items-center
+             } rounded-xl py-2 pr-4 pl-2 focus:outline-none font-lg text-sm text-center inline-flex items-center
             `}
         >
           {copied ? (
