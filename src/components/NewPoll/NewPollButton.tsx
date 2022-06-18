@@ -1,5 +1,6 @@
 import { useUserId } from '@/hooks/useUserId';
 import { isProd } from '@/lib/isProd';
+import { getPollPrivateUrl } from '@/utils/poll';
 import { useContext, useMutation } from '@/utils/trpc';
 import React, { useState } from 'react';
 
@@ -31,11 +32,7 @@ const NewPollButton: React.FC<Props> = ({
     },
     onSuccess: async (data) => {
       await refetchQueries(['poll.public-polls']);
-      setPrivateUrl(
-        isProd
-          ? `${process.env.NEXT_PUBLIC_PROD_URL}/poll/${data.privateId}`
-          : `${process.env.NEXT_PUBLIC_LOCAL_URL}/poll/${data.privateId}`
-      );
+      setPrivateUrl(getPollPrivateUrl(data.privateId));
     },
   });
 
