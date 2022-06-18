@@ -18,7 +18,7 @@ const MainLayout: React.FC<Props> = ({
       {showHeader && (
         <>
           <div className="flex flex-row justify-between">
-            <h1 className="text-3xl text-stone-600 font-bold mb-3">{title}</h1>
+            <h1 className="text-3xl text-stone-600 font-bold">{title}</h1>
 
             {rightButton}
           </div>

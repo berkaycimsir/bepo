@@ -7,9 +7,14 @@ import PollOption from './PollOption';
 type Props = {
   poll: inferQueryOutput<'poll.public-polls'>['polls'][0];
   isDetails?: boolean;
+  isProfilePage?: boolean;
 };
 
-const PollQuestion: React.FC<Props> = ({ poll, isDetails = false }) => {
+const PollQuestion: React.FC<Props> = ({
+  poll,
+  isDetails = false,
+  isProfilePage = false,
+}) => {
   const { userId } = useUserId();
 
   const userVote = React.useMemo(
@@ -30,6 +35,12 @@ const PollQuestion: React.FC<Props> = ({ poll, isDetails = false }) => {
     <div className="flex mt-12 flex-col p-8 bg-white shadow-md rounded-lg">
       <div className="text-gray-700 font-bold text-lg">{poll.question}</div>
 
+      {isProfilePage && (
+        <div className="text-gray-400 font-light text-sm">
+          {poll.private ? 'private' : 'public'} poll
+        </div>
+      )}
+
       <ul className="mt-3">
         {poll.options.map((option) => (
           <PollOption
@@ -39,6 +50,7 @@ const PollQuestion: React.FC<Props> = ({ poll, isDetails = false }) => {
             totalVotes={totalVotes}
             currentVote={currentVote}
             setCurrentVote={setCurrentVote}
+            isProfilePage={isProfilePage}
           />
         ))}
       </ul>
@@ -49,6 +61,7 @@ const PollQuestion: React.FC<Props> = ({ poll, isDetails = false }) => {
         userVote={userVote}
         poll={poll}
         isDetails={isDetails}
+        isProfilePage={isProfilePage}
       />
     </div>
   );

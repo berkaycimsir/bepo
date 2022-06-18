@@ -5,11 +5,13 @@ import { z } from 'zod';
 export const pollRouter = createRouter()
   .query('public-polls', {
     async resolve() {
+      const polls = await prisma.poll.findMany({
+        include: { votes: true, options: { include: { votes: true } } },
+        where: { private: { not: { equals: true } } },
+      });
+
       return {
-        polls: await prisma.poll.findMany({
-          include: { votes: true, options: { include: { votes: true } } },
-          where: { private: { not: { equals: true } } },
-        }),
+        polls: polls.reverse(),
       };
     },
   })
@@ -22,6 +24,20 @@ export const pollRouter = createRouter()
         where: { privateId: pollId },
         include: { votes: true, options: { include: { votes: true } } },
       });
+    },
+  })
+  .query('user-polls', {
+    input: z.object({
+      userId: z.string(),
+      isPrivate: z.boolean(),
+    }),
+    async resolve({ input: { userId, isPrivate } }) {
+      const polls = await prisma.poll.findMany({
+        include: { votes: true, options: { include: { votes: true } } },
+        where: { userId, private: isPrivate },
+      });
+
+      return { polls: polls.reverse() };
     },
   })
   .mutation('add-vote', {
@@ -42,6 +58,7 @@ export const pollRouter = createRouter()
   })
   .mutation('add-poll', {
     input: z.object({
+      userId: z.string(),
       question: z.string(),
       options: z.array(
         z.object({
@@ -50,9 +67,10 @@ export const pollRouter = createRouter()
       ),
       isPrivate: z.boolean(),
     }),
-    async resolve({ input: { question, options, isPrivate } }) {
+    async resolve({ input: { question, options, isPrivate, userId } }) {
       return await prisma.poll.create({
         data: {
+          userId,
           question,
           private: isPrivate,
           options: {

@@ -9,6 +9,7 @@ type Props = {
   userVote:
     | inferQueryOutput<'poll.public-polls'>['polls'][0]['options'][0]
     | undefined;
+  isProfilePage: boolean;
 };
 
 const PollOption: React.FC<Props> = ({
@@ -17,6 +18,7 @@ const PollOption: React.FC<Props> = ({
   currentVote,
   setCurrentVote,
   userVote,
+  isProfilePage,
 }) => {
   const onCheck = React.useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,13 +43,15 @@ const PollOption: React.FC<Props> = ({
   return (
     <>
       <div key={option.id} className="form-check p-1 mt-1">
-        <input
-          className="form-check-input border border-gray-300 rounded-full transition duration-200 bg-white checked:border-indigo-400 checked:!bg-indigo-400 !ring-0 outline-none mr-3 cursor-pointer"
-          type="checkbox"
-          checked={currentVote.id === option.id}
-          id={checboxId}
-          onChange={onCheck}
-        />
+        {!isProfilePage && (
+          <input
+            className="form-check-input border border-gray-300 rounded-full transition duration-200 bg-white checked:border-indigo-400 checked:!bg-indigo-400 !ring-0 outline-none mr-3 cursor-pointer"
+            type="checkbox"
+            checked={currentVote.id === option.id}
+            id={checboxId}
+            onChange={onCheck}
+          />
+        )}
 
         <label
           htmlFor={checboxId}
@@ -56,7 +60,7 @@ const PollOption: React.FC<Props> = ({
           {option.value}
         </label>
 
-        {Boolean(userVote) && (
+        {(Boolean(userVote) || isProfilePage) && (
           <div className="mt-4 flex flex-row items-center">
             <div className="text-gray-400 font-normal text-sm mr-3">
               {optionPercentage}

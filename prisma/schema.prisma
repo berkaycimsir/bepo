@@ -15,6 +15,7 @@ model Poll {
   options   Option[]
   private   Boolean  @default(false)
   privateId String   @default(cuid())
+  userId    String
   votes     Vote[]
 }
 

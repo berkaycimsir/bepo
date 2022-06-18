@@ -1,3 +1,4 @@
+import { useUserId } from '@/hooks/useUserId';
 import { isProd } from '@/lib/isProd';
 import { useContext, useMutation } from '@/utils/trpc';
 import React, { useState } from 'react';
@@ -21,6 +22,7 @@ const NewPollButton: React.FC<Props> = ({
   resetForm,
   setPrivateUrl,
 }) => {
+  const { userId } = useUserId();
   const { refetchQueries } = useContext();
 
   const { mutate } = useMutation(['poll.add-poll'], {
@@ -38,12 +40,14 @@ const NewPollButton: React.FC<Props> = ({
   });
 
   const addPoll = React.useCallback(() => {
+    if (!userId) return;
     mutate({
+      userId,
       options: options.map((opt) => ({ value: opt.value })),
       question,
       isPrivate,
     });
-  }, [isPrivate, mutate, options, question]);
+  }, [isPrivate, userId, mutate, options, question]);
 
   const isOptionsEmpty = React.useMemo(
     () => options.filter((o) => o.value.trim().length !== 0).length < 2,
