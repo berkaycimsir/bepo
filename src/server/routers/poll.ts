@@ -1,10 +1,9 @@
-import { prisma } from '@/lib/prisma';
 import { createRouter } from '../createRouter';
 import { z } from 'zod';
 
 export const pollRouter = createRouter()
   .query('public-polls', {
-    async resolve() {
+    async resolve({ ctx: { prisma } }) {
       const polls = await prisma.poll.findMany({
         include: { votes: true, options: { include: { votes: true } } },
         where: { private: { not: { equals: true } } },
@@ -19,7 +18,7 @@ export const pollRouter = createRouter()
     input: z.object({
       pollId: z.string(),
     }),
-    async resolve({ input: { pollId } }) {
+    async resolve({ ctx: { prisma }, input: { pollId } }) {
       return await prisma.poll.findFirst({
         where: { privateId: pollId },
         include: { votes: true, options: { include: { votes: true } } },
@@ -31,7 +30,7 @@ export const pollRouter = createRouter()
       userId: z.string(),
       isPrivate: z.boolean(),
     }),
-    async resolve({ input: { userId, isPrivate } }) {
+    async resolve({ ctx: { prisma }, input: { userId, isPrivate } }) {
       const polls = await prisma.poll.findMany({
         include: { votes: true, options: { include: { votes: true } } },
         where: { userId, private: isPrivate },
@@ -51,7 +50,10 @@ export const pollRouter = createRouter()
       ),
       isPrivate: z.boolean(),
     }),
-    async resolve({ input: { question, options, isPrivate, userId } }) {
+    async resolve({
+      ctx: { prisma },
+      input: { question, options, isPrivate, userId },
+    }) {
       return await prisma.poll.create({
         data: {
           userId,
