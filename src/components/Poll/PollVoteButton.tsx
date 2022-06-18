@@ -41,7 +41,7 @@ const PollVoteButton: React.FC<Props> = ({
     ),
   });
 
-  const { mutate } = useMutation(['poll.add-vote'], {
+  const { mutate } = useMutation(['vote.add-vote'], {
     onMutate: async ({ optionId }) => {
       const newVote = { id: Date.now(), pollId, uniqueUserId: userId as string, optionId };
       if (isDetails) {

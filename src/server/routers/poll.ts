@@ -40,22 +40,6 @@ export const pollRouter = createRouter()
       return { polls: polls.reverse() };
     },
   })
-  .mutation('add-vote', {
-    input: z.object({
-      pollId: z.number(),
-      optionId: z.number(),
-      userId: z.string(),
-    }),
-    async resolve({ input: { pollId, optionId, userId } }) {
-      return await prisma.vote.create({
-        data: {
-          pollId,
-          optionId,
-          uniqueUserId: userId,
-        },
-      });
-    },
-  })
   .mutation('add-poll', {
     input: z.object({
       userId: z.string(),
