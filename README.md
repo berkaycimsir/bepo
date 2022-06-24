@@ -6,7 +6,7 @@
 
 ## Build & Run
 
-1. First, install dirnev and repository
+1. First, install direnv and repository
 
    ```sh
    brew install direnv
